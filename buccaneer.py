@@ -1,14 +1,10 @@
 import tkinter as tk
 import os
 
-os.chdir("/home/slater/store/coding/buccaneer/")
-
-test_dir = "/home/slater/store/Music/"
+os.chdir("")
 
 with open('dirlist.txt') as dirlist:
-    lines = dirlist.readlines()
-
-print(lines)
+    dirslist_from_file = dirlist.readlines()
 
 def list_inodes(directory):
     read_list = []
@@ -45,7 +41,7 @@ def start_convert(file_list, output_format):
     for file in file_list:
         convert_file(file, output_format)
 
-test_list = list_inodes("/home/slater/store/Music/")
+test_list = list_inodes(dirslist_from_file[0])
 print(list_files(test_list))
 
 # for directory in lines:

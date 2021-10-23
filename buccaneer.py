@@ -1,11 +1,15 @@
 import tkinter as tk
 import os
 
-os.chdir("")
+dirs_from_list = []
 
 with open('dirlist.txt') as dirlist:
-    dirslist_from_file = dirlist.readlines()
+    for line in dirlist.readlines():
+        print(line)
+        if line[0] != "#":
+            dirs_from_list.append(line)
 
+#return inodes (files or folders) -> list of inodes of kind "DirEntry"
 def list_inodes(directory):
     read_list = []
     for inode in os.scandir(directory):
@@ -22,36 +26,27 @@ def list_files(inodes_list):
             files_list.append(inodes_list)
     return files_list
 
+#get all the names of files from a list of DirEntry's
 def names_list_from_files_list(files_list):
     names_list = []
     for nameable in files_list:
         names_list.append(nameable.name)
     return names_list
 
-def convert_file(file, output_format):
-    output_file_name = file.path.split(".")[0] + output_format
-    # command = ["ffmpeg", "-i", file.path, file.path + output_format]
-    # command = f"ffmpeg -i {file.path} {file.path}.{output_format}"
-    # subprcss = subprocess.run([command])
-    # print(command)
-    # #it needs to rpint the command
+#take in a list of DirEntry's and reformats to pass them to conversion function(s)
+def start_convert_files(file_list, output_format):
     pass
 
-def start_convert(file_list, output_format):
-    for file in file_list:
-        convert_file(file, output_format)
+#final step of file conversion process
+def convert_file(file, output_format):
+    output_file_name = file.path.split(".")[0] + output_format
+    pass
 
-test_list = list_inodes(dirslist_from_file[0])
-print(list_files(test_list))
+# test_list = list_inodes(dirs_from_list[0])
+# print(list_files(test_list))
 
-# for directory in lines:
-#     directory = directory[:-1]
-#     print(directory)
-#     for file in os.scandir(directory):
-#         print(file.is_file())
-
-for directory in lines:
-    print(list_inodes(directory[:-1]))
+# for directory in dirs_from_list:
+#     print(list_inodes(directory[:-1]))
 
 #['__class__', '__class_getitem__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__fspath__', '__ge__', '__getattribute__', 
 #'__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', 

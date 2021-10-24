@@ -62,19 +62,11 @@ def list_inodes(directory):
 
 # take a list of inodes of type "DirEntry" and return a list of files within
 def list_files(inodes_list):
-    files_list = []
-    for inode in inodes_list:
-        if inode.is_file:
-            files_list.append(inode) #changed check if it breaks
-    return files_list
+    return [inode for inode in inodes_list if inode.is_file]
 
 # same as list_files() but with directories
 def list_directories(inodes_list):
-    dirs_list = []
-    for inode in inodes_list:
-        if inode.is_dir:
-            dirs_list.append(inode) #changed check if it breaks
-    return dirs_list
+    return [inode for inode in inode_list if inode.is_dir]
 
 # get all the names of files from a list of DirEntry's
 def names_list_from_inodes_list(inodes_list):

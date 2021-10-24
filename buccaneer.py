@@ -78,10 +78,7 @@ def list_directories(inodes_list):
 
 # get all the names of files from a list of DirEntry's
 def names_list_from_inodes_list(inodes_list):
-    names_list = []
-    for nameable in inodes_list:
-        names_list.append(nameable.name)
-    return names_list
+    return [nameable.name for nameable in inodes_list]
 
 #TESTS
 #convert all items in a directory/subdirectories

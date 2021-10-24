@@ -1,2 +1,0 @@
-#Directories in the form: /example/directory/
-/home/slater/store/music/

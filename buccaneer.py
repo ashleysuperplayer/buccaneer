@@ -1,15 +1,56 @@
 import tkinter as tk
+import subprocess
 import os
 
-dirs_from_list = []
+dirs_from_dirlist = []
 
+format_extensions = {"vorbis": "ogg", "m4a": "m4a", "mp3": "mp3", "flac": "flac"}
+
+# handles all of the information required for conversion, as well as the conversion process
+class Conversion:
+    def __init__(self, input_path, format_, output_method, *options):
+        self.input_path = input_path
+        self.format_ = format_
+        self.output_method = output_method
+        self.options = options
+
+    #converts files
+    #options passed are ffmpeg options
+    def convert(self):
+        return subprocess.Popen(["ffmpeg", "-i", self.input_path, *self.options, self.output_method(self.input_path, self.format_)], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+
+# open file containing directories and ignore entries beginning with "#"
 with open('dirlist.txt') as dirlist:
     for line in dirlist.readlines():
-        print(line)
         if line[0] != "#":
-            dirs_from_list.append(line)
+            dirs_from_dirlist.append(line)
 
-#return inodes (files or folders) -> list of inodes of kind "DirEntry"
+def remove_file_extension(file_string):
+    return os.path.splitext(file_string)[0]
+
+# deposits the output file in the same directory as the input, retains its name
+def output_method_keep_name_path(input_path, output_format):
+    return remove_file_extension(input_path) + "." + format_extensions[output_format]
+
+# button method for a user confirming multiple conversions, placeholder
+def button_lock_conversions(dirs, output_format, output_method, *options):
+    conversions_list = []
+    for dir in dirs:
+        conversions_list.append(Conversion(dir.path, output_format, output_method, *options))
+    convert_list(conversions_list)
+
+# convert all conversions from a list
+def convert_list(conversions_list):
+    active_processes = []
+    for conversion in conversions_list:
+        while len(active_processes) > 5:
+            for active_process in active_processes:
+                if active_process.poll() != None:
+                    active_processes.remove(active_process)
+                    print("popen finished " + str(active_process))
+        active_processes.append(conversion.convert())
+
+# return inodes (files or folders) from a string pointing to a dir -> list of inodes of kind "DirEntry"
 def list_inodes(directory):
     read_list = []
     for inode in os.scandir(directory):
@@ -19,35 +60,31 @@ def list_inodes(directory):
             read_list += list_inodes(inode)
     return read_list
 
+# take a list of inodes of type "DirEntry" and return a list of files within
 def list_files(inodes_list):
     files_list = []
     for inode in inodes_list:
         if inode.is_file:
-            files_list.append(inodes_list)
+            files_list.append(inode) #changed check if it breaks
     return files_list
 
-#get all the names of files from a list of DirEntry's
-def names_list_from_files_list(files_list):
+# same as list_files() but with directories
+def list_directories(inodes_list):
+    dirs_list = []
+    for inode in inodes_list:
+        if inode.is_dir:
+            dirs_list.append(inode) #changed check if it breaks
+    return dirs_list
+
+# get all the names of files from a list of DirEntry's
+def names_list_from_inodes_list(inodes_list):
     names_list = []
-    for nameable in files_list:
+    for nameable in inodes_list:
         names_list.append(nameable.name)
     return names_list
 
-#take in a list of DirEntry's and reformats to pass them to conversion function(s)
-def start_convert_files(file_list, output_format):
-    pass
-
-#final step of file conversion process
-def convert_file(file, output_format):
-    output_file_name = file.path.split(".")[0] + output_format
-    pass
-
-# test_list = list_inodes(dirs_from_list[0])
-# print(list_files(test_list))
-
-# for directory in dirs_from_list:
-#     print(list_inodes(directory[:-1]))
-
-#['__class__', '__class_getitem__', '__delattr__', '__dir__', '__doc__', '__eq__', '__format__', '__fspath__', '__ge__', '__getattribute__', 
-#'__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', 
-#'__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', 'inode', 'is_dir', 'is_file', 'is_symlink', 'name', 'path', 'stat']
+#TESTS
+#convert all items in a directory/subdirectories
+def test_dirslist():
+    file_list = list_files(list_inodes(dirs_from_dirlist[0])) #should work, does not
+    button_lock_conversions(file_list, "vorbis", output_method_keep_name_path, "-vn")

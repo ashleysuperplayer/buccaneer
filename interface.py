@@ -1,23 +1,30 @@
-import tkinter as tk
 import subprocess
 import os
 
 dirs_from_dirlist = []
 
-format_extensions = {"vorbis": "ogg", "m4a": "m4a", "mp3": "mp3", "flac": "flac"}
+format_extensions = {"vorbis": "ogg", "m4a": "m4a", "mp3": "mp3", "flac": "flac"} #expand this
+conversion_methods = {"keep name": "keepnamefunction()", "leave where found": "leavewherefoundfunction()", "etc": "etc"} 
+                        # dictionary of front-facing names that will be tied to functions
+                        # in gui. these will be a set of mutually exclusive items
+                        # that can be moved back and forth between "potential" and "selected" lists.
+                        # incompatible methods will be removed from the potential list when
+                        # one of the others to the selected list
+                        # these will be added into the "options" category in the gui and stitched together
+                        # into a list within the greater "options" list to form complete "output methods"
 
 # handles all of the information required for conversion, as well as the conversion process
 class Conversion:
-    def __init__(self, input_path, format_, output_method, *options):
+    def __init__(self, input_path, output_format, output_method, *options):
         self.input_path = input_path
-        self.format_ = format_
+        self.output_format = output_format
         self.output_method = output_method
         self.options = options
 
     #converts files
     #options passed are ffmpeg options
     def convert(self):
-        return subprocess.Popen(["ffmpeg", "-i", self.input_path, *self.options, self.output_method(self.input_path, self.format_)], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        return subprocess.Popen(["ffmpeg", "-i", self.input_path, *self.options, self.output_method(self.input_path, self.output_format)], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
 
 # open file containing directories and ignore entries beginning with "#"
 with open('dirlist.txt') as dirlist:
@@ -37,6 +44,7 @@ def button_lock_conversions(dirs, output_format, output_method, *options):
     conversions_list = []
     for dir in dirs:
         conversions_list.append(Conversion(dir.path, output_format, output_method, *options))
+    # return conversions_list
     convert_list(conversions_list)
 
 # convert all conversions from a list
@@ -47,7 +55,7 @@ def convert_list(conversions_list):
             for active_process in active_processes:
                 if active_process.poll() != None:
                     active_processes.remove(active_process)
-                    print("popen finished " + str(active_process))
+                    print("popen finished " + str(active_process)) # TESTING
         active_processes.append(conversion.convert())
 
 # return inodes (files or folders) from a string pointing to a dir -> list of inodes of kind "DirEntry"

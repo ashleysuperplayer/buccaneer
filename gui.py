@@ -3,7 +3,7 @@ import tkinter.ttk as ttk
 from tkinter.filedialog import askopenfilename
 import interface
 
-class MainWindow(ttk.Frame):
+class Main_Window(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
@@ -71,7 +71,7 @@ class Create_Job_Window(tk.Toplevel):
 
 def init():
     root = tk.Tk()
-    MainWindow(root).grid()
+    Main_Window(root).grid()
     root.mainloop()
 
 init()

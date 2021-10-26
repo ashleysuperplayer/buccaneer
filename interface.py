@@ -21,6 +21,9 @@ class Conversion:
         self.output_method = output_method
         self.options = options
 
+    def __repr__(self):
+        return "Input method: " + self.input_path + "\nOutput format: " + self.output_format + "\nOutput method: " + self.output_method + "\nOptions: " + str(self.options)
+
     #converts files
     #options passed are ffmpeg options
     def convert(self):

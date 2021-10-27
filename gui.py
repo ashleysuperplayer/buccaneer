@@ -50,36 +50,40 @@ class Create_Job_Window(tk.Toplevel):
         self.output_method = ""
         self.options = ""
 
-        self.create_buttons()
-        self.create_textboxes()
+        self.create_directorybar()
+        self.create_confirmcancelbuttons()
         self.grid_definitions()
 
-    def create_buttons(self):
+    def create_directorybar(self):
+        self.input_directory_textbox = ttk.Entry(self, width=50)
+        self.input_directory_textbox.bind("<Return>", self.action_confirm_job_enter)
+        self.input_directory_textbox.bind("<KP_Enter>", self.action_confirm_job_enter)
         self.browse_files_button = ttk.Button(self, text="browse files", command=self.action_browse_files_button)
 
+    def create_confirmcancelbuttons(self):
         self.confirm_job_button = ttk.Button(self, text="confirm job", command=self.action_confirm_job_button)
+        self.cancel_button = ttk.Button(self, text="cancel", command=self.action_cancel_button) 
 
-    def create_textboxes(self):
-        self.input_directory_textbox = tk.Text(self, width=10, height=1)
-
-    # input path box is too small
     def grid_definitions(self):
         self.confirm_job_button.grid(column=0, row=0)
+        self.cancel_button.grid(column=1, row=0)
         self.browse_files_button.grid(column=9, row=2)
         self.input_directory_textbox.grid(column=0, row=2, columnspan=8)
 
     def action_browse_files_button(self):
-        self.input_directory_textbox.delete("1.0", "end")
-        self.input_directory_textbox.insert("1.0", askopenfilename())
+        self.input_directory_textbox.delete(0, "end")
+        self.input_directory_textbox.insert(0, askopenfilename())
 
     def get_data(self):
-        self.input_directory = self.input_directory_textbox.get("1.0", "end-1c")
+        self.input_directory = self.input_directory_textbox.get()
 
     def validate_data(self):
         if not os.path.isfile(self.input_directory):
             return "invalid path error" # in future do something better
         return "valid"
 
+    def action_confirm_job_enter(self, e):
+        self.action_confirm_job_button()
     def action_confirm_job_button(self):
         self.get_data()
         if self.validate_data() == "valid":
@@ -87,6 +91,9 @@ class Create_Job_Window(tk.Toplevel):
             self.parent.jobs.append(interface.Conversion(self.input_directory, self.output_format, self.output_method, self.options))
         print(self.parent.jobs) # TESTING
         print(self.validate_data())
+        self.destroy()
+
+    def action_cancel_button(self):
         self.destroy()
 
 def init():

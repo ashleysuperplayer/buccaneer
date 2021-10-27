@@ -1,20 +1,24 @@
-
 import os
 import butils
 
 class OptionsHandler:
     def __init__(self):
-        self.options = initOptions()
+        self.options = self.initOptions()
 
-    def initOptions():
+    def initOptions(self):
         self.options = {}
-        with open('options.cfg') as optionLines:
+        with open('/home/slater/store/coding/buccaneer/options.cfg') as optionLines:
             for line in optionLines:
                 lineComponents = validateOption(line)
                 self.options[lineComponents[0]] = lineComponents[1]
+                print(self.options[lineComponents[0]])
 
-    def validateOption(optionLine):
-        return splitOption(butils.noWhitespace(butils.noComments(optionLine)))
 
-    def splitOption(string):
-        return string.split("=")
+def validateOption(optionLine):
+    return splitOption(butils.removeWhitespace(butils.removeComments(optionLine)))
+
+def splitOption(string):
+    return string.split("=")
+
+wagwan = OptionsHandler()
+wagwan.initOptions()

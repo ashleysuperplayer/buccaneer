@@ -44,6 +44,7 @@ class Create_Job_Window(tk.Toplevel):
         tk.Toplevel.__init__(self, parent, *args, **kwargs)
         self.parent = parent
         self.title("Create Job")
+        self.resizable(False, False)
         self.input_directory = ""
         self.output_format = ""
         self.output_method = ""

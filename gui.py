@@ -50,22 +50,23 @@ class Create_Job_Window(tk.Toplevel):
         self.output_method = ""
         self.options = ""
 
-        self.create_buttons()
-        self.create_textboxes()
+        self.create_directorybar()
+        self.create_confirmcancelbuttons()
         self.grid_definitions()
 
-    def create_buttons(self):
-        self.browse_files_button = ttk.Button(self, text="browse files", command=self.action_browse_files_button)
-
-        self.confirm_job_button = ttk.Button(self, text="confirm job", command=self.action_confirm_job_button)
-
-    def create_textboxes(self):
+    def create_directorybar(self):
         self.input_directory_textbox = ttk.Entry(self, width=50)
         self.input_directory_textbox.bind("<Return>", self.action_confirm_job_enter)
         self.input_directory_textbox.bind("<KP_Enter>", self.action_confirm_job_enter)
+        self.browse_files_button = ttk.Button(self, text="browse files", command=self.action_browse_files_button)
+
+    def create_confirmcancelbuttons(self):
+        self.confirm_job_button = ttk.Button(self, text="confirm job", command=self.action_confirm_job_button)
+        self.cancel_button = ttk.Button(self, text="cancel", command=self.action_cancel_button) 
 
     def grid_definitions(self):
         self.confirm_job_button.grid(column=0, row=0)
+        self.cancel_button.grid(column=1, row=0)
         self.browse_files_button.grid(column=9, row=2)
         self.input_directory_textbox.grid(column=0, row=2, columnspan=8)
 
@@ -90,6 +91,9 @@ class Create_Job_Window(tk.Toplevel):
             self.parent.jobs.append(interface.Conversion(self.input_directory, self.output_format, self.output_method, self.options))
         print(self.parent.jobs) # TESTING
         print(self.validate_data())
+        self.destroy()
+
+    def action_cancel_button(self):
         self.destroy()
 
 def init():

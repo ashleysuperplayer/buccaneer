@@ -60,10 +60,10 @@ class Create_Job_Window(tk.Toplevel):
         self.confirm_job_button = ttk.Button(self, text="confirm job", command=self.action_confirm_job_button)
 
     def create_textboxes(self):
-        self.input_directory_textbox = ttk.Entry(self, width=10)
+        self.input_directory_textbox = ttk.Entry(self, width=50)
         self.input_directory_textbox.bind("<Return>", self.action_confirm_job_enter)
-        self.input_directory_textbox.bind("<KP_Entry>", self.action_confirm_job_enter)
-    # input path box is too small
+        self.input_directory_textbox.bind("<KP_Enter>", self.action_confirm_job_enter)
+
     def grid_definitions(self):
         self.confirm_job_button.grid(column=0, row=0)
         self.browse_files_button.grid(column=9, row=2)

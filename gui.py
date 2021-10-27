@@ -43,6 +43,7 @@ class Create_Job_Window(tk.Toplevel):
     def __init__(self, parent, *args, **kwargs):
         tk.Toplevel.__init__(self, parent, *args, **kwargs)
         self.parent = parent
+        self.title("Create Job")
         self.input_directory = ""
         self.output_format = ""
         self.output_method = ""
@@ -89,7 +90,9 @@ class Create_Job_Window(tk.Toplevel):
 
 def init():
     root = tk.Tk()
+    root.title("buccaneer")
     Main_Window(root).grid()
     root.mainloop()
 
-init()
+if __name__ == "__main__":
+    init()

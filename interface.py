@@ -3,15 +3,10 @@ import os
 
 dirs_from_dirlist = []
 
-format_extensions = {"vorbis": "ogg", "m4a": "m4a", "mp3": "mp3", "flac": "flac"} #expand this
-conversion_methods = {"keep name": "keepnamefunction()", "leave where found": "leavewherefoundfunction()", "etc": "etc"} 
-                        # dictionary of front-facing names that will be tied to functions
-                        # in gui. these will be a set of mutually exclusive items
-                        # that can be moved back and forth between "potential" and "selected" lists.
-                        # incompatible methods will be removed from the potential list when
-                        # one of the others to the selected list
-                        # these will be added into the "options" category in the gui and stitched together
-                        # into a list within the greater "options" list to form complete "output methods"
+format_extensions = {"vorbis": "ogg", "m4a": "m4a", "mp3": "mp3", "flac": "flac"} # expand this
+
+conversion_methods = {"keep name": "keepnamefunction()", "leave where found": "leavewherefoundfunction()",
+                      "exif subdirectories": "exifsubdirectories(args)", "delete original": "deleteoriginal()"}
 
 # handles all of the information required for conversion, as well as the conversion process
 class Conversion:
@@ -20,6 +15,9 @@ class Conversion:
         self.output_format = output_format
         self.output_method = output_method
         self.options = options
+
+    def __repr__(self):
+        return "Input method: " + self.input_path + "\nOutput format: " + self.output_format + "\nOutput method: " + self.output_method + "\nOptions: " + str(self.options)
 
     #converts files
     #options passed are ffmpeg options

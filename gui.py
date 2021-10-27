@@ -60,7 +60,7 @@ class Create_Job_Window(tk.Toplevel):
         self.confirm_job_button = ttk.Button(self, text="confirm job", command=self.action_confirm_job_button)
 
     def create_textboxes(self):
-        self.input_directory_textbox = tk.Text(self, width=10, height=1)
+        self.input_directory_textbox = ttk.Entry(self, width=10)
 
     # input path box is too small
     def grid_definitions(self):
@@ -69,11 +69,11 @@ class Create_Job_Window(tk.Toplevel):
         self.input_directory_textbox.grid(column=0, row=2, columnspan=8)
 
     def action_browse_files_button(self):
-        self.input_directory_textbox.delete("1.0", "end")
-        self.input_directory_textbox.insert("1.0", askopenfilename())
+        self.input_directory_textbox.delete(0, "end")
+        self.input_directory_textbox.insert(0, askopenfilename())
 
     def get_data(self):
-        self.input_directory = self.input_directory_textbox.get("1.0", "end-1c")
+        self.input_directory = self.input_directory_textbox.get()
 
     def validate_data(self):
         if not os.path.isfile(self.input_directory):

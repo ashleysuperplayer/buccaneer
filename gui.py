@@ -57,7 +57,7 @@ class Create_Job_Window(tk.Toplevel):
     def create_buttons(self):
         self.browse_files_button = ttk.Button(self, text="browse files", command=self.action_browse_files_button)
 
-        self.confirm_job_button = ttk.Button(self, text="confirm job", command=lambda: self.action_confirm_job_button(self.parent))
+        self.confirm_job_button = ttk.Button(self, text="confirm job", command=self.action_confirm_job_button)
 
     def create_textboxes(self):
         self.input_directory_textbox = tk.Text(self, width=10, height=1)
@@ -80,12 +80,12 @@ class Create_Job_Window(tk.Toplevel):
             return "invalid path error" # in future do something better
         return "valid"
 
-    def action_confirm_job_button(self, parent):
+    def action_confirm_job_button(self):
         self.get_data()
         if self.validate_data() == "valid":
-            parent.jobs_display.insert("", "end", values=(self.input_directory, self.output_format, self.output_method, self.options))
-            parent.jobs.append(interface.Conversion(self.input_directory, self.output_format, self.output_method, self.options))
-        print(parent.jobs) # TESTING
+            self.parent.jobs_display.insert("", "end", values=(self.input_directory, self.output_format, self.output_method, self.options))
+            self.parent.jobs.append(interface.Conversion(self.input_directory, self.output_format, self.output_method, self.options))
+        print(self.parent.jobs) # TESTING
         print(self.validate_data())
         self.destroy()
 

@@ -1,9 +1,12 @@
-def removeWhitespace(string):
-    return " ".join(string.split())
+def removeWhitespace(s: str) -> str:
+    """Removes whitespace from a string
+    e.g. '  a b   c e  a \t  ' |-> 'a b c e a'"""
+    return " ".join(s.split())
 
-def removeComments(string):
-    i = string.find("#")
-    if i == -1:
-        return string
-    else:
-        return string[:i]
+def removeComments(s: str) -> str:
+    """Removes '#' comments from the end of a string by trimming after the first found hash.
+    If no hash, return argument as-is
+    e.g. 'abc#de#f' |-> 'abc'"""
+    i = s.find("#")
+    return s if i==-1 else s[:i]
+

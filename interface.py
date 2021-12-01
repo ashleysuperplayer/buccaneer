@@ -72,7 +72,7 @@ def list_files(inodes_list):
 
 # same as list_files() but with directories
 def list_directories(inodes_list):
-    return [inode for inode in inode_list if inode.is_dir]
+    return [inode for inode in inodes_list if inode.is_dir]
 
 # get all the names of files from a list of DirEntry's
 def names_list_from_inodes_list(inodes_list):

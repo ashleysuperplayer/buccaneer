@@ -3,7 +3,6 @@ import tkinter.ttk as ttk
 from tkinter.filedialog import askopenfilename
 import interface
 import os
-
 class Main_Window(ttk.Frame):
     def __init__(self, parent):
         ttk.Frame.__init__(self, parent)
